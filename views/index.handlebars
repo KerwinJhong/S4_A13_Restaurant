@@ -1,0 +1,69 @@
+<div class="container">
+  <!-- search bar -->
+  <div class="my-4">
+    <nav class="navbar navbar-light bg-light row justify-content-between w-100 m-0">
+      <form class="form-inline col" action="/search">
+        <input type="text" name="keyword" class="form-control" placeholder="Restaurant name"
+          aria-label="restaurant Name..." aria-describedby="search-button" value={{keyword}}>
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="submit" id="search-button">Search</button>
+        </div>
+      </form>
+      <div class="text-right col-4">
+        <div class="btn-group">
+          <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+            {{#if sortKey}} by {{sortKey}} {{else}} 請選擇排序方式 {{/if}}
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item"
+              href="/restaurants/search?keyword={{keyword}}&sortKey=name&sortValue=asc">店名：A->Z</a>
+            <a class="dropdown-item"
+              href="/restaurants/search?keyword={{keyword}}&sortKey=name&sortValue=desc">店名：Z->A</a>
+            <a class="dropdown-item"
+              href="/restaurants/search?keyword={{keyword}}&sortKey=rating&sortValue=desc">評分：高至低</a>
+            <a class="dropdown-item"
+              href="/restaurants/search?keyword={{keyword}}&sortKey=rating&sortValue=asc">評分：低至高</a>
+            <a class="dropdown-item"
+              href="/restaurants/search?keyword={{keyword}}&sortKey=category&sortValue=asc">類別</a>
+            <a class="dropdown-item"
+              href="/restaurants/search?keyword={{keyword}}&sortKey=location&sortValue=desc">地區</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <!-- restaurant list -->
+  <div class="row" id="data-panel">
+    {{#if restaurants}}
+    {{#each restaurants}}
+    <div class="col-sm-4 mb-4">
+      <a href="/restaurants/{{{this.id}}}" class="text-secondary">
+        <div class="card mb-2">
+          <img class="card-img-top" style="height: 200px;" src="{{ this.image }}" alt="Card image cap">
+          <div class="card-body movie-item-body">
+            <div class="badge badge-danger index_rating float-right"><i class="fas fa-star mr-2"></i>{{ this.rating }}
+            </div>
+            <h6 class="card-title">{{ this.name }}</h6>
+            <div><i class="fas fa-utensils mr-2"></i>{{ this.category }}</div>
+            <div><i class="fas fa-map-marker-alt mr-2"></i>{{ this.location }}</div>
+          </div>
+          <div class="card-footer">
+            <a href="/restaurants/{{{this.id}}}/edit" class="btn btn-primary">Edit</a>
+            <a href="/restaurants/{{{this.id}}}" class="btn btn-primary">Detail</i></a>
+            <form action="/restaurants/{{{this.id}}}/delete?_method=DELETE" method="POST" style="display: inline;">
+              <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+            </form>
+          </div>
+        </div>
+      </a>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="w-100 text-center">
+      <h2>Oops! We couldn’t find results for your search: <br>{{keyword}}
+      </h2>
+    </div>
+    <div class="banner"></div>
+    {{/if}}
+  </div>
+</div>
