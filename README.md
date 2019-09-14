@@ -4,6 +4,7 @@
 
 ## User story
 1. 使用者可以瀏覽全部所有餐廳
+1. 使用者可以瀏覽全部所有餐廳
 2. 使用者可以點擊任一餐廳，查看詳細資訊
 3. 使用者可以搜尋餐廳名字
 4. 使用者可以新增一家餐廳
@@ -18,11 +19,19 @@
 + Express-handlebars ^3.1.0
 + mongoose ^5.6.11
 + method-override ^3.0.0
++ bcryptjs ^2.4.3
++ connect-flash ^0.1.1
++ dotenv ^8.1.0
++ express-session ^1.16.2
++ method-override ^3.0.0
++ passport ^0.4.0
++ passport-facebook ^3.0.0
++ passport-local ^1.0.0
 
 ## 安裝步驟
 1. 依照git clone下載資料夾
 ```
-$ git clone https://github.com/KerwinJhong/S4_A10_Restaurant.git
+$ git clone https://github.com/KerwinJhong/S4_A13_Restaurant.git
 ```
 2. 從終端機安裝npm套件，輸入以下指令
 ```
@@ -34,11 +43,11 @@ $ npm run dev
 ```
 4. 建立預設餐廳資料
 ```
-$ [~/S4_A10_Restaurant/models/seeds] node RestaurantSeeder.js
+$ [~/S4_A13_Restaurant/models/seeds] node RestaurantSeeder.js
 ```
 5. 執行專案
 ```
-$ [~/S4_A10_Restaurant] npm run dev
+$ [~/S4_A13_Restaurant] npm run dev
 ```
 6. 輸入網址並呈現我的餐廳清單介面
 ```
@@ -47,8 +56,18 @@ http://localhost:3000
 
 ## 專案內容
 + 餐廳所有清單
-![image](https://github.com/KerwinJhong/S4_A10_Restaurant/blob/master/restaurant.png)
+![image](https://github.com/KerwinJhong/S4_A13_Restaurant/blob/master/restaurant.png)
 
+## 預設使用者資訊
+```
+user1：
+email: user1@example.com
+password: 12345678
+
+user2：
+email: user2@example.com
+password: 12345678
+```
 
 ## 作者
 [Kerwin Jhong](https://github.com/KerwinJhong)

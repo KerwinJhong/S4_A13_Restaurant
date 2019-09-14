@@ -8,8 +8,7 @@ router.get('/search', (req, res) => {
     const sortValue = req.query.sortValue || 'desc'
     const sortObj = {}
     sortObj[sortKey] = sortValue
-
-    Restaurant.find({})
+    Restaurant.find({ userId: req.user._id })
         .sort(sortObj)
         .exec((err, restaurants) => {
 

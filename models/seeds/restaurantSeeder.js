@@ -1,7 +1,19 @@
 const mongoose = require('mongoose')
 const Restaurant = require('../restaurant')
+const User = require('../user')
+const bcrypt = require('bcryptjs')
 
-mongoose.connect('mongodb://localhost/restaurant', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/restaurant', { useNewUrlParser: true, useCreateIndex: true })
+
+const userList = [{
+        email: 'user1@example.com',
+        password: '12345678'
+    },
+    {
+        email: 'user2@example.com',
+        password: '12345678'
+    }
+]
 
 const restaurant = [{
         id: 1,
@@ -74,32 +86,10 @@ const restaurant = [{
         google_map: 'https://goo.gl/maps/rFLNu87ruBM2',
         rating: 4.3,
         description: '紅酒吧，現代創意料理，開胃小館。提供純素選擇，提供無麩質選擇，提供素食選擇。'
-    },
-    {
-        id: 7,
-        name: 'Fika Fika Cafe',
-        name_en: 'Fika Fika Cafe',
-        category: '咖啡',
-        image: 'https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/5633/07.jpg',
-        location: '台北市中山區伊通街 33 號',
-        phone: '02 2507 0633',
-        google_map: 'https://goo.gl/maps/Y1iyiSK7EeR2',
-        rating: 4.3,
-        description: '我們在乎每一位顧客、賣出去的每一滴咖啡、每一粒咖啡豆。而今，「Fika Fika Cafe Online Store」更期望把如此美好的體驗，分享給喜歡我們的每一位顧客，希望您無論在世界的哪一個角落，都能與我們一起享受「Fika Fika」的美好時光。'
-    },
-    {
-        id: 8,
-        name: '布娜飛比利時啤酒餐廳',
-        name_en: 'Bravo Beer',
-        category: '義式餐廳',
-        image: 'https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/5634/08.jpg',
-        location: '台北市松山區市民大道四段 185 號',
-        phone: '02 2570 1255',
-        google_map: 'https://goo.gl/maps/V9mKwVJ4s5v',
-        rating: 4.7,
-        description: '我們希望帶給您的，不只是啤酒，有美食，還有一份對生活的熱情。 義大利語「Bravo」的原意─「喝采」、「讚揚」， 我想著如果有一個大家都能輕鬆品嚐美酒、享受美食的地方，那就真的是太棒了！ 因為這個念頭，加上一股對比利時啤酒的熱情， 於是「Bravo Beer布娜飛比利時啤酒餐廳」在2006年誕生了...'
     }
 ]
+
+
 const db = mongoose.connection
 
 db.on('error', () => {
@@ -108,19 +98,44 @@ db.on('error', () => {
 
 db.once('open', () => {
     console.log('db connected!')
-
-    for (var i = 0; i < restaurant.length; i++) {
-        Restaurant.create({
-            name: restaurant[i].name,
-            name_en: restaurant[i].name_en,
-            category: restaurant[i].category,
-            image: restaurant[i].image,
-            location: restaurant[i].location,
-            phone: restaurant[i].phone,
-            google_map: restaurant[i].google_map,
-            rating: restaurant[i].rating,
-            description: restaurant[i].description
+    var i = 0
+    userList.forEach(user => {
+        const newUser = new User({
+            name: user.name,
+            email: user.email,
+            password: user.password
         })
-    }
+
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(newUser.password, salt, (err, hash) => {
+                if (err) throw err
+                newUser.password = hash
+
+                newUser.save().then(users => {
+                    for (var j = 0; j < restaurant.length / 2; j++) {
+                        Restaurant.create({
+                            userId: users._id,
+                            name: restaurant[i].name,
+                            name_en: restaurant[i].name_en,
+                            category: restaurant[i].category,
+                            image: restaurant[i].image,
+                            location: restaurant[i].location,
+                            phone: restaurant[i].phone,
+                            google_map: restaurant[i].google_map,
+                            rating: restaurant[i].rating,
+                            description: restaurant[i].description
+                        })
+                        i++
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            })
+        })
+    })
+
+
+
     console.log('done')
+
 })

@@ -64,8 +64,13 @@
     width: 340px;
 }
 
-#data-panel {
-    margin-bottom: 30px;
+
+/* ============  errpage ============*/
+
+.errPage {
+    background: #dddddd center center url('https://image.freepik.com/free-vector/oops-word-concept_23-2147853346.jpg');
+    height: 80vh;
+    border-radius: 20px;
 }
 
 footer {
